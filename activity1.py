@@ -17,7 +17,7 @@ class RestaurantOrderManagement:
         frame = ttk.Frame(root, padding=15)
         frame.place(relx = 0.5, rely = 0.5, anchor = "center")
         ttk.Label(frame, text = "Restaurtant Order Managment", font = ("Arial", 16, "bold")).grid(row=0,columnspan=2,pady=10)
-        for i, (item, price) in enumerate(self.menu.item(), 1):
+        for i, (item, price) in enumerate(self.menu.items(), 1):
             label = ttk.Label(frame)
             label.grid(row=i, column=0, padx=10, pady=5)
             self.labels[item]=label
@@ -26,7 +26,7 @@ class RestaurantOrderManagement:
             entry.grid(row=i,column=1)
             self.entries[item] = entry
 
-        self.currency = ttk.StringVar(value="USD")
+        self.currency = tk.StringVar(value="USD")
         ttk.Label(frame, text="Currency: ").grid(row=7,column=0)
         ttk.Combobox(frame, textvariable=self.currency, values = ["USD", "INR"], state="readonly").grid(row=7, column=1)
 
@@ -38,14 +38,14 @@ class RestaurantOrderManagement:
         rate = self.rate if self.currency.get()=="INR" else 1
         symbol = "₹" if self.currency.get() == "INR" else "$"
 
-        for item, label in self.label.items():
-            label.config(tect=f"{item} ({symbol}{self.menu[item]*rate}): ")
-    def place_ordr(self):
+        for item, label in self.labels.items():
+            label.config(text=f"{item} ({symbol}{self.menu[item]*rate}): ")
+    def place_order(self):
         rate = self.rate if self.currency.get() == "INR" else 1
         symbol = "₹" if self.currency.get() == "INR" else "$"
         total, summary = 0, "Order Summary: "
 
-        for iten, entry in self.entries.items():
+        for item, entry in self.entries.items():
             try:
                 qty = int(entry.get() or 0)
                 if qty < 0:
